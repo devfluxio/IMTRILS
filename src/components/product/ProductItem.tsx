@@ -102,7 +102,22 @@ export const ProductItem = ({
       </div>
       <div className="px-1">
         <div className="flex justify-between items-center mt-2">
-          <Link href={productLink} className="bg-black text-white px-3 py-1 rounded text-sm">Buy</Link>
+          {/* SSR: Always render a Link, but intercept click on client for auth check */}
+          <Link
+            href={productLink}
+            className="bg-black text-white px-3 py-1 rounded text-sm"
+            onClick={e => {
+              if (typeof window !== 'undefined') {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                  e.preventDefault();
+                  window.location.href = '/signup';
+                }
+              }
+            }}
+          >
+            Buy
+          </Link>
           <Link href={productLink} className="text-sm text-neutral-500">View details</Link>
         </div>
       </div>
