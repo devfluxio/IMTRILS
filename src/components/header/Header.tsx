@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 import { SearchContext } from '@/layouts/PrimaryLayout';
 import { useTranslation } from 'next-i18next';
 import { Transition } from '@headlessui/react';
@@ -31,12 +32,33 @@ export const sideNavLinks: [string, IconType][] = [
 ];
 
 export const Header = ({ collections }: { collections: any[] }) => {
+  const router = useRouter();
   const { t } = useTranslation('header');
   const [hoveredNavLink, setHoveredNavLink] = useState<NavLink | null>(null);
   const { setSearchValue } = useContext(SearchContext);
-  // Disable menu on hover for men/women
-  const handleShowMenu = (navLink: NavLink) => {};
-  const handleCloseMenu = () => {};
+  // Auth state for logout/signup button
+  // Only render one button at a time based on token
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Check authToken on mount and on route change
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsLoggedIn(typeof window !== 'undefined' && !!localStorage.getItem('authToken'));
+    };
+    checkAuth();
+    router.events?.on('routeChangeComplete', checkAuth);
+    window.addEventListener('storage', checkAuth);
+    return () => {
+      router.events?.off('routeChangeComplete', checkAuth);
+      window.removeEventListener('storage', checkAuth);
+    };
+  }, [router]);
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+      setIsLoggedIn(false);
+      router.push('/');
+    }
+  };
 
   return (
     <header>
@@ -73,8 +95,24 @@ export const Header = ({ collections }: { collections: any[] }) => {
           </ul>
           <ul className="ml-auto items-center md:flex">
             <Search onSearch={setSearchValue} />
-            {sideNavLinks.map(([url, Icon]) => (
-              <Link key={url} href={url} className="ml-5 hidden md:block">
+            {/* Only one button shows at a time based on isLoggedIn */}
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="ml-5 hidden md:block px-4 py-1 rounded bg-neutral-200 text-neutral-700 hover:bg-neutral-300 font-medium"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/signup"
+                className="ml-5 hidden md:block px-4 py-1 rounded bg-black text-white hover:bg-neutral-900 font-medium"
+              >
+                Signup
+              </Link>
+            )}
+            {sideNavLinks.map(([url, Icon], idx) => (
+              <Link key={url} href={url} className={`ml-5 hidden md:block${idx === 0 ? '' : ''}`}>
                 <Icon
                   className="text-neutral-700 transition-colors hover:text-violet-700"
                   size="20px"

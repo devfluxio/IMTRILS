@@ -27,6 +27,21 @@ const OrderPage = () => {
     size: '',
   });
 
+  // Prefill email if user is signed in and verified
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          if (payload && payload.email) {
+            setForm(f => ({ ...f, email: payload.email }));
+          }
+        } catch (e) {}
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (!id) return;
     const fetchProduct = async () => {
