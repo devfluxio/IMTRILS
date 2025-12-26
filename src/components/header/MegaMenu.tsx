@@ -23,7 +23,7 @@ const trendingItems = [
   { label: 'Fall Collection', href: '/' },
   { label: 'Vintage 70s Collection', href: '/' },
   { label: 'Pharrell Premium Basics', href: '/' },
-  { label: 'Tee Bundle:2 for $39 or 3 for $49', href: '/' },
+  { label: 'Tee Bundle:2 for ₹39 or 3 for ₹49', href: '/' },
   { label: 'Breast Cancer Awareness Collection', href: '/' },
 ];
 
