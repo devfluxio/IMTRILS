@@ -49,9 +49,7 @@ const Signin: NextPageWithLayout = () => {
       if (data.token && !localStorage.getItem('authToken')) {
         localStorage.setItem('authToken', data.token);
       }
-      setToken('');
-      setEmail('');
-      setPassword('');
+      window.location.href = '/';
     } catch (err) {
       setError('Server error. Check console.');
       console.error(err);

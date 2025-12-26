@@ -157,7 +157,7 @@ export const ProductItem = ({
         </div>
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-black">
-            ${numberWithCommas((typeof price === 'number' ? price : Number(price || 0)).toFixed(2))}
+            ₹{numberWithCommas((typeof price === 'number' ? price : Number(price || 0)).toFixed(2))}
           </h3>
           <div className="flex items-center justify-center text-xs font-medium text-neutral-500">
             <BsStarFill size="11px" className="mr-1 text-yellow-400" />

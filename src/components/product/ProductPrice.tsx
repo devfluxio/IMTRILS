@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Accordion } from '@/components/ui';
 import { useQuery } from '@/hooks';
 
-const priceOptions = ['$', '$$', '$$$'];
+const priceOptions = ['₹', '₹₹', '₹₹₹'];
 
 export const ProductPrice = () => {
   const router = useRouter();

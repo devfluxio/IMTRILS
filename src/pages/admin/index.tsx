@@ -336,9 +336,14 @@ const AdminPage: NextPageWithLayout = () => {
 
           <ul className="space-y-3">
             {products.map(p => (
-              <li key={p._id} className="border p-3 flex justify-between">
-                <div>
-                  <b>{p.title}</b> – ₹{p.price}
+              <li key={p._id} className="border p-3 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  {p.images && p.images.length > 0 && (
+                    <img src={p.images[0]} alt={p.title} className="w-16 h-16 object-cover rounded border" />
+                  )}
+                  <div>
+                    <b>{p.title}</b> – ₹{p.price}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => startEdit(p)} className="bg-yellow-400 px-2">Edit</button>

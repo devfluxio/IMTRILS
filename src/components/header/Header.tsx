@@ -23,7 +23,7 @@ export const navLinks: NavLink[] = [
   { name: 'women', href: '/products/women' },
   { name: 'sale', href: '/sale' },
   { name: 'blog', href: '/blog' },
-  { name: 'contacts', href: '/contacts' },
+  { name: 'contacts', href: '/contact' },
 ];
 
 export const sideNavLinks: [string, IconType][] = [
@@ -39,10 +39,24 @@ export const Header = ({ collections }: { collections: any[] }) => {
   // Auth state for logout/signup button
   // Only render one button at a time based on token
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   // Check authToken on mount and on route change
   useEffect(() => {
     const checkAuth = () => {
-      setIsLoggedIn(typeof window !== 'undefined' && !!localStorage.getItem('authToken'));
+      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      setIsLoggedIn(!!token);
+
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setIsAdmin(payload.role === 'admin');
+        } catch (e) {
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
     };
     checkAuth();
     router.events?.on('routeChangeComplete', checkAuth);
@@ -56,6 +70,7 @@ export const Header = ({ collections }: { collections: any[] }) => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
       setIsLoggedIn(false);
+      setIsAdmin(false);
       router.push('/');
     }
   };
@@ -97,12 +112,22 @@ export const Header = ({ collections }: { collections: any[] }) => {
             <Search onSearch={setSearchValue} />
             {/* Only one button shows at a time based on isLoggedIn */}
             {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="ml-5 hidden md:block px-4 py-1 rounded bg-neutral-200 text-neutral-700 hover:bg-neutral-300 font-medium"
-              >
-                Logout
-              </button>
+              <>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="ml-5 hidden md:block px-4 py-1 rounded bg-neutral-900 text-white hover:bg-neutral-800 font-medium"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="ml-5 hidden md:block px-4 py-1 rounded bg-neutral-200 text-neutral-700 hover:bg-neutral-300 font-medium"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link
                 href="/signup"
