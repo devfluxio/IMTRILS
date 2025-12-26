@@ -171,7 +171,7 @@ Signup.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'Sign up',
         description: 'Create account',
-        canonical: 'https://karashop.vercel.app/signup',
+        canonical: 'https://imtils.vercel.app/signup',
       }}
     >
       {page}
