@@ -152,7 +152,6 @@ const OrderPage = () => {
                     value={form.name}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="John Doe"
                     required
                   />
                 </div>
@@ -164,7 +163,6 @@ const OrderPage = () => {
                     value={form.email}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="john@example.com"
                     required
                   />
                 </div>
@@ -179,7 +177,6 @@ const OrderPage = () => {
                     value={form.phone}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="+91 98765 43210"
                     required
                   />
                 </div>
@@ -191,7 +188,6 @@ const OrderPage = () => {
                     value={form.city}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="Mumbai"
                     required
                   />
                 </div>
@@ -204,7 +200,6 @@ const OrderPage = () => {
                   value={form.address}
                   onChange={handleChange}
                   className="w-full border rounded px-3 py-2"
-                  placeholder="123 Main Street, Apt 4B"
                   rows={3}
                   required
                 />
@@ -219,7 +214,6 @@ const OrderPage = () => {
                     value={form.landmark}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="Near Central Park"
                   />
                 </div>
                 <div>
@@ -230,7 +224,6 @@ const OrderPage = () => {
                     value={form.postalCode}
                     onChange={handleChange}
                     className="w-full border rounded px-3 py-2"
-                    placeholder="400001"
                   />
                 </div>
               </div>
