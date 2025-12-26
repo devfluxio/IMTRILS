@@ -25,6 +25,7 @@ const Signin: NextPageWithLayout = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  // Remove token display, use localStorage
   const [token, setToken] = useState('');
   const [error, setError] = useState('');
 
@@ -44,7 +45,11 @@ const Signin: NextPageWithLayout = () => {
         return;
       }
       const data = await res.json();
-      setToken(data.token);
+      // Save token to localStorage if not already present
+      if (data.token && !localStorage.getItem('authToken')) {
+        localStorage.setItem('authToken', data.token);
+      }
+      setToken('');
       setEmail('');
       setPassword('');
     } catch (err) {
@@ -62,17 +67,7 @@ const Signin: NextPageWithLayout = () => {
           Sign in
         </h3>
 
-        {token && (
-          <div className="mb-6 rounded bg-green-100 p-3 text-left">
-            <p className="text-xs font-semibold text-green-800">✓ Signed in! Token:</p>
-            <textarea
-              readOnly
-              className="mt-2 w-full text-xs bg-white border rounded p-2 h-24 break-all"
-              value={token}
-            />
-            <p className="mt-2 text-xs text-gray-600">Paste this token in <Link href="/admin" className="text-blue-600 underline">Admin Panel</Link></p>
-          </div>
-        )}
+        {/* Token is now saved to localStorage, not shown */}
 
         {error && (
           <div className="mb-4 rounded bg-red-100 p-3 text-left text-xs text-red-800">

@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '../_app';
 import { PrimaryLayout } from '@/layouts';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
 
@@ -13,7 +14,10 @@ export const getStaticProps: GetStaticProps = async () => ({
 });
 
 const AdminPage: NextPageWithLayout = () => {
+    const router = useRouter();
+  // Use localStorage for token, check admin access
   const [token, setToken] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -112,8 +116,35 @@ const AdminPage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (token) fetchProducts();
-  }, [token]);
+    // On mount, check token in localStorage and verify admin
+    const verifyAdmin = async () => {
+      const storedToken = localStorage.getItem('authToken');
+      if (!storedToken) {
+        setIsAdmin(false);
+        router.replace('/');
+        return;
+      }
+      setToken(storedToken);
+      // Call backend to verify admin
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/verify-admin`, {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${storedToken}` },
+        });
+        if (res.ok) {
+          setIsAdmin(true);
+          fetchProducts();
+        } else {
+          setIsAdmin(false);
+          router.replace('/');
+        }
+      } catch {
+        setIsAdmin(false);
+        router.replace('/');
+      }
+    };
+    verifyAdmin();
+  }, []);
 
   const submit = async (e?: any) => {
     e?.preventDefault();
@@ -248,79 +279,78 @@ const AdminPage: NextPageWithLayout = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-4">Admin – Inner Garments Products</h1>
+      {/* Only show admin page if isAdmin is true */}
+      {isAdmin ? (
+        <>
+          <form onSubmit={submit} className="border p-4 rounded mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+            <input placeholder="Brand" value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} />
+            <input placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} />
+            <input placeholder="Compare Price" value={form.compareAtPrice} onChange={e => setForm({ ...form, compareAtPrice: e.target.value })} />
+            <input placeholder="SKU" value={form.sku} onChange={e => setForm({ ...form, sku: e.target.value })} />
+            <input placeholder="Stock" value={form.stock} onChange={e => setForm({ ...form, stock: Number(e.target.value) })} />
 
-      <input
-        className="border px-3 py-2 w-full mb-4"
-        placeholder="Bearer Token"
-        value={token}
-        onChange={e => setToken(e.target.value)}
-      />
+            <input placeholder="Categories (comma separated)" value={form.categories} onChange={e => setForm({ ...form, categories: e.target.value })} />
+            <input placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
 
-      <form onSubmit={submit} className="border p-4 rounded mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-        <input placeholder="Brand" value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} />
-        <input placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} />
-        <input placeholder="Compare Price" value={form.compareAtPrice} onChange={e => setForm({ ...form, compareAtPrice: e.target.value })} />
-        <input placeholder="SKU" value={form.sku} onChange={e => setForm({ ...form, sku: e.target.value })} />
-        <input placeholder="Stock" value={form.stock} onChange={e => setForm({ ...form, stock: Number(e.target.value) })} />
+            <input placeholder="Sizes (S,M,L)" value={form.sizes} onChange={e => setForm({ ...form, sizes: e.target.value })} />
+            <input placeholder="Colors" value={form.colors} onChange={e => setForm({ ...form, colors: e.target.value })} />
 
-        <input placeholder="Categories (comma separated)" value={form.categories} onChange={e => setForm({ ...form, categories: e.target.value })} />
-        <input placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
+            <input placeholder="Product Type" value={form.productType} onChange={e => setForm({ ...form, productType: e.target.value })} />
+            <input placeholder="Gender (men,women,unisex)" value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })} />
 
-        <input placeholder="Sizes (S,M,L)" value={form.sizes} onChange={e => setForm({ ...form, sizes: e.target.value })} />
-        <input placeholder="Colors" value={form.colors} onChange={e => setForm({ ...form, colors: e.target.value })} />
+            <input placeholder="Fabric" value={form.fabric} onChange={e => setForm({ ...form, fabric: e.target.value })} />
+            <input placeholder="Material" value={form.material} onChange={e => setForm({ ...form, material: e.target.value })} />
 
-        <input placeholder="Product Type" value={form.productType} onChange={e => setForm({ ...form, productType: e.target.value })} />
-        <input placeholder="Gender (men,women,unisex)" value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })} />
+            <input placeholder="Fit" value={form.fit} onChange={e => setForm({ ...form, fit: e.target.value })} />
+            <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
 
-        <input placeholder="Fabric" value={form.fabric} onChange={e => setForm({ ...form, fabric: e.target.value })} />
-        <input placeholder="Material" value={form.material} onChange={e => setForm({ ...form, material: e.target.value })} />
+            <input placeholder="Support Level (low,medium,high)" value={form.supportLevel} onChange={e => setForm({ ...form, supportLevel: e.target.value })} />
+            <input placeholder="Padding (None,Light,Medium)" value={form.padding} onChange={e => setForm({ ...form, padding: e.target.value })} />
 
-        <input placeholder="Fit" value={form.fit} onChange={e => setForm({ ...form, fit: e.target.value })} />
-        <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
+            <input placeholder="Wire Type (None,Underwire)" value={form.wireType} onChange={e => setForm({ ...form, wireType: e.target.value })} />
+            <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
 
-        <input placeholder="Support Level (low,medium,high)" value={form.supportLevel} onChange={e => setForm({ ...form, supportLevel: e.target.value })} />
-        <input placeholder="Padding (None,Light,Medium)" value={form.padding} onChange={e => setForm({ ...form, padding: e.target.value })} />
-
-        <input placeholder="Wire Type (None,Underwire)" value={form.wireType} onChange={e => setForm({ ...form, wireType: e.target.value })} />
-        <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
-
-        <textarea className="col-span-2" placeholder="Images URLs (comma separated)" value={form.images} onChange={e => setForm({ ...form, images: e.target.value })} />
-        <div className="col-span-2 flex items-center gap-3">
-          <input type="file" multiple onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)} />
-          <button type="button" onClick={uploadFiles} className="bg-blue-600 text-white px-3 py-1 rounded">Upload Selected</button>
-          <span className="text-sm text-neutral-500">Uploaded URLs will be appended to Images field</span>
-        </div>
-        <textarea className="col-span-2" placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-
-        <input placeholder="SEO Title" value={form.seoTitle} onChange={e => setForm({ ...form, seoTitle: e.target.value })} className="col-span-2" />
-        <input placeholder="SEO Description" value={form.seoDesc} onChange={e => setForm({ ...form, seoDesc: e.target.value })} className="col-span-2" />
-
-        <input placeholder="Variants JSON (optional)" value={form.variantsJson} onChange={e => setForm({ ...form, variantsJson: e.target.value })} className="col-span-2" />
-
-        <div className="col-span-2 flex gap-3 items-center">
-          <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.published} onChange={e => setForm({ ...form, published: e.target.checked })} /> Published</label>
-          <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} /> Featured</label>
-        </div>
-
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded col-span-2">
-          {editingId ? 'Update Product' : 'Create Product'}
-        </button>
-      </form>
-
-      <ul className="space-y-3">
-        {products.map(p => (
-          <li key={p._id} className="border p-3 flex justify-between">
-            <div>
-              <b>{p.title}</b> – ₹{p.price}
+            <textarea className="col-span-2" placeholder="Images URLs (comma separated)" value={form.images} onChange={e => setForm({ ...form, images: e.target.value })} />
+            <div className="col-span-2 flex items-center gap-3">
+              <input type="file" multiple onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)} />
+              <button type="button" onClick={uploadFiles} className="bg-blue-600 text-white px-3 py-1 rounded">Upload Selected</button>
+              <span className="text-sm text-neutral-500">Uploaded URLs will be appended to Images field</span>
             </div>
-            <div className="flex gap-2">
-              <button onClick={() => startEdit(p)} className="bg-yellow-400 px-2">Edit</button>
-              <button onClick={() => remove(p._id)} className="bg-red-500 text-white px-2">Delete</button>
+            <textarea className="col-span-2" placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+
+            <input placeholder="SEO Title" value={form.seoTitle} onChange={e => setForm({ ...form, seoTitle: e.target.value })} className="col-span-2" />
+            <input placeholder="SEO Description" value={form.seoDesc} onChange={e => setForm({ ...form, seoDesc: e.target.value })} className="col-span-2" />
+
+            <input placeholder="Variants JSON (optional)" value={form.variantsJson} onChange={e => setForm({ ...form, variantsJson: e.target.value })} className="col-span-2" />
+
+            <div className="col-span-2 flex gap-3 items-center">
+              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.published} onChange={e => setForm({ ...form, published: e.target.checked })} /> Published</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} /> Featured</label>
             </div>
-          </li>
-        ))}
-      </ul>
+
+            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded col-span-2">
+              {editingId ? 'Update Product' : 'Create Product'}
+            </button>
+          </form>
+
+          <ul className="space-y-3">
+            {products.map(p => (
+              <li key={p._id} className="border p-3 flex justify-between">
+                <div>
+                  <b>{p.title}</b> – ₹{p.price}
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => startEdit(p)} className="bg-yellow-400 px-2">Edit</button>
+                  <button onClick={() => remove(p._id)} className="bg-red-500 text-white px-2">Delete</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div className="text-center text-red-600 font-semibold text-lg py-10">Access Denied: Admin token required</div>
+      )}
     </div>
   );
 };

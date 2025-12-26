@@ -24,7 +24,7 @@ const Signup: NextPageWithLayout = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState('');
+  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -57,7 +57,9 @@ const Signup: NextPageWithLayout = () => {
       }
 
       const data = await res.json();
-      setToken(data.token);
+      if (data.message && data.message.includes('verify')) {
+        setSuccess('Signup successful! Please check your email to verify your account.');
+      }
       setName('');
       setEmail('');
       setPassword('');
@@ -77,21 +79,17 @@ const Signup: NextPageWithLayout = () => {
           Create Account
         </h3>
 
-        {token && (
-          <div className="mb-6 rounded bg-green-100 p-3 text-left">
-            <p className="text-xs font-semibold text-green-800">✓ Account created! Token:</p>
-            <textarea
-              readOnly
-              className="mt-2 w-full text-xs bg-white border rounded p-2 h-24 break-all"
-              value={token}
-            />
-            <p className="mt-2 text-xs text-gray-600">Paste this token in <Link href="/admin" className="text-blue-600 underline">Admin Panel</Link> (if you're an admin)</p>
-          </div>
-        )}
+        {/* Token is now saved to localStorage, not shown */}
+
 
         {error && (
           <div className="mb-4 rounded bg-red-100 p-3 text-left text-xs text-red-800">
             {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 rounded bg-green-100 p-3 text-left text-xs text-green-800">
+            {success}
           </div>
         )}
 
