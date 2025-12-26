@@ -14,7 +14,7 @@ interface Props {
 const newItems = [
   { label: 'New Arrivals', href: '/' },
   { label: 'Best Sellers', href: '/' },
-  { label: 'Only at Imtils', href: '/' },
+  { label: 'Only at Imtrils', href: '/' },
   { label: 'Members Exclusives', href: '/' },
   { label: 'Release Dates', href: '/' },
 ];

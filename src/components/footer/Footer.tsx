@@ -173,10 +173,10 @@ export const Footer = () => {
       {/* Brand / Bottom Area */}
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-12 md:pb-10 md:pt-14">
         <div className="flex items-end justify-between gap-6">
-          <p className="text-xs text-neutral-600">Imtils © {year}</p>
+          <p className="text-xs text-neutral-600">Imtrils © {year}</p>
           <div className="flex-1 text-right">
             <span className="block font-serif text-4xl font-bold italic leading-none tracking-tight text-neutral-900 sm:text-5xl md:text-6xl">
-              Imtils
+              Imtrils
             </span>
           </div>
         </div>
