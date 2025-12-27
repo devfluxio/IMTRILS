@@ -1,16 +1,17 @@
+import type { Collection } from '@/types';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { IconType } from 'react-icons';
 import { FiHome, FiUser, FiHeart, FiShoppingBag, FiGrid } from 'react-icons/fi';
-import { Collections } from '@/types';
-import { NavLink } from '@/components';
+
+import type { NavLink } from '@/components/header/Header';
 import { CollectionsPage } from './CollectionsPage';
 
 interface Props {
   navLinks: NavLink[];
-  collections: Collections;
+  collections: Collection[];
 }
 
 interface BottomTab {

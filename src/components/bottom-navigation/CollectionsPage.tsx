@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { FiX } from 'react-icons/fi';
-import { Collections } from '@/types';
+
 import { NavLink } from '@/components';
 import { Accordion } from '@/components/ui';
+import type { Collection } from '@/types';
 
+/* ✅ Props interface ADD kiya */
 interface Props {
   navLinks: NavLink[];
-  collections: Collections;
+  collections: Collection[];
   onPageClose: () => void;
 }
 
@@ -29,6 +31,7 @@ export const CollectionsPage = ({
           onClick={onPageClose}
         />
       </div>
+
       <ul className="mt-5 flex flex-col px-2">
         {navLinks.map((item, index) => (
           <li
@@ -37,51 +40,60 @@ export const CollectionsPage = ({
           >
             {item.collapsible ? (
               <Accordion>
-                <Accordion.Header>{t(`header:${item.name}`)}</Accordion.Header>
+                <Accordion.Header>
+                  {t(`header:${item.name}`)}
+                </Accordion.Header>
+
                 <Accordion.Body className="px-2 text-sm">
                   <ul>
-                    {collections &&
-                      collections.map(collection => (
-                        <li
-                          key={collection.id}
-                          className="block border-b border-solid border-neutral-100"
-                        >
-                          <Accordion>
-                            <Accordion.Header>
-                              {collection.name}
-                            </Accordion.Header>
-                            <Accordion.Body className="px-2 text-xs">
-                              <ul>
-                                {collection.children
-                                  .filter(subCollection =>
-                                    subCollection.types.includes(
-                                      item.name === 'men' ? 'MEN' : 'WOMEN'
-                                    )
+                    {collections?.map((collection: any) => (
+                      <li
+                        key={collection.id}
+                        className="block border-b border-solid border-neutral-100"
+                      >
+                        <Accordion>
+                          <Accordion.Header>
+                            {collection.name}
+                          </Accordion.Header>
+
+                          <Accordion.Body className="px-2 text-xs">
+                            <ul>
+                              {collection.children
+                                ?.filter((subCollection: any) =>
+                                  subCollection.types.includes(
+                                    item.name === 'men' ? 'MEN' : 'WOMEN'
                                   )
-                                  .map(subCollection => (
-                                    <li
-                                      key={subCollection.id}
-                                      className="block border-b border-solid border-neutral-100 py-2"
+                                )
+                                .map((subCollection: any) => (
+                                  <li
+                                    key={subCollection.id}
+                                    className="block border-b border-solid border-neutral-100 py-2"
+                                  >
+                                    <Link
+                                      href={`/products/${item.name}/${subCollection.slug}`}
+                                      onClick={onPageClose}
                                     >
-                                      <Link
-                                        href={`/products/${item.name}/${subCollection.slug}`}
-                                        onClick={onPageClose}
-                                      >
-                                        <h3>{subCollection.name}</h3>
-                                      </Link>
-                                    </li>
-                                  ))}
-                              </ul>
-                            </Accordion.Body>
-                          </Accordion>
-                        </li>
-                      ))}
+                                      <h3>{subCollection.name}</h3>
+                                    </Link>
+                                  </li>
+                                ))}
+                            </ul>
+                          </Accordion.Body>
+                        </Accordion>
+                      </li>
+                    ))}
                   </ul>
                 </Accordion.Body>
               </Accordion>
             ) : (
               <Link
-                href={['men','women'].includes(item.name) ? `/products/${item.name}` : item.name === 'contacts' ? '/contact' : `/${item.name}`}
+                href={
+                  ['men', 'women'].includes(item.name)
+                    ? `/products/${item.name}`
+                    : item.name === 'contacts'
+                    ? '/contact'
+                    : `/${item.name}`
+                }
                 className="block py-4"
                 onClick={onPageClose}
               >

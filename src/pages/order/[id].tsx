@@ -12,7 +12,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
 const OrderPage = () => {
   const router = useRouter();
   const { id } = router.query as { id?: string };
-  const [product, setProduct] = useState<any | null>(null);
+  const [product, setProduct] = useState<import('@/types').Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: '',

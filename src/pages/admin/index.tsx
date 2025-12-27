@@ -35,7 +35,7 @@ import { useRouter } from 'next/router';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
 
-type Product = any;
+import type { Product } from '@/types';
 
 export const getStaticProps: GetStaticProps = async () => ({
   props: {},
@@ -50,7 +50,7 @@ const AdminPage: NextPageWithLayout = () => {
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<Partial<Product>>({
     title: '',
     description: '',
     price: '',

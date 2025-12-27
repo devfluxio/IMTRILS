@@ -9,7 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const OrderSuccessPage = () => {
   const router = useRouter();
-  const [orderData, setOrderData] = useState<any | null>(null);
+  const [orderData, setOrderData] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
     const data = sessionStorage.getItem('orderSuccess');

@@ -1,5 +1,6 @@
-import { Product } from '@/types';
 import { ProductItem, Skeleton } from './ProductItem';
+
+import type { Product } from '@/types';
 
 interface Props {
   products: Product[] | undefined;

@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
-
-export const collections: Prisma.CollectionCreateManyInput[] = [
+// Collection data for menu, no Prisma types needed
+export const collections = [
   { id: 1, name: 'Shoes', slug: 'shoes', types: ['MEN', 'WOMEN'] },
   { id: 2, name: 'Clothing', slug: 'clothing', types: ['MEN', 'WOMEN'] },
   { id: 3, name: 'Accessories', slug: 'accessories', types: ['MEN', 'WOMEN'] },

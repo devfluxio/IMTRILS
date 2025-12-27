@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
-
-export const products: Prisma.ProductCreateInput[] = [
+// Product data for menu, no Prisma types needed
+export const products = [
   {
     name: 'Black shirt with white border',
     description: `Go sporty this summer with this vintage navy and white striped v-neck t-shirt from the Abercrombie & Fitch. Perfect for pairing with denim and white kicks for a stylish sporty vibe. Will fit a UK 8-10, model shown is a UK 8 and 5.`,
@@ -45,37 +44,32 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Funnel collar puffer jacket',
     description: `Go sporty this summer with this vintage navy and white striped v-neck t-shirt from the Abercrombie & Fitch. Perfect for pairing with denim and white kicks for a stylish sporty vibe. Will fit a UK 8-10, model shown is a UK 8 and 5.`,
-    {
-      name: 'Funnel collar puffer jacket',
-      description: `Go sporty this summer with this vintage navy and white striped v-neck t-shirt from the Abercrombie & Fitch. Perfect for pairing with denim and white kicks for a stylish sporty vibe. Will fit a UK 8-10, model shown is a UK 8 and 5.`,
-      price: 87.95,
-      rate: 4.5,
-      published: true,
-      types: ['WOMEN'],
-      sizes: ['S', 'M', 'L', 'XL'],
-      colors: ['GREEN', 'PINK'],
-      collection: {
-        connect: {
-          id: 29,
-        },
-      },
-      images: {
-        createMany: {
-          data: [
-            {
-              imageURL: '/assets/products/women/beige-lace-bralette.jpg',
-              imageBlur:
-                'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCAANAAoDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAgMEBv/EACEQAQABAwIHAAAAAAAAAAAAAAERAAIDEjEEEyEyUWGB/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AN1l4vl59IDZb3+flVnUk2pZhxzOi1d5aIstACYPdB//2Q==',
-            },
-            {
-              imageURL: '/assets/products/women/lace-lingerie.jpg',
-              imageBlur:
-                'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAANAAoDASEAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwQG/8QAHBAAAgMAAwEAAAAAAAAAAAAAAQIAAxETIZEi/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ljjmU94h92PogSWKpuqcj6XM9yNplSP/9k=',
-            },
-          ],
-        },
+    price: 87.95,
+    rate: 4.5,
+    published: true,
+    types: ['WOMEN'],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['GREEN', 'PINK'],
+    collection: {
+      connect: {
+        id: 29,
       },
     },
+    images: {
+      createMany: {
+        data: [
+          {
+            imageURL: '/assets/products/women/beige-lace-bralette.jpg',
+            imageBlur:
+              'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCAANAAoDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAgMEBv/EACEQAQABAwIHAAAAAAAAAAAAAAERAAIDEjEEEyEyUWGB/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AN1l4vl59IDZb3+flVnUk2pZhxzOi1d5aIstACYPdB//2Q==',
+          },
+          {
+            imageURL: '/assets/products/women/lace-lingerie.jpg',
+            imageBlur:
+              'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAANAAoDASEAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwQG/8QAHBAAAgMAAwEAAAAAAAAAAAAAAQIAAxETIZEi/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ljjmU94h92PogSWKpuqcj6XM9yNplSP/9k=',
+          },
+        ],
+      },
     },
   },
   {

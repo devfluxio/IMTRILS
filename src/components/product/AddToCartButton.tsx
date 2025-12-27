@@ -12,8 +12,8 @@ export default function AddToCartButton({ id, name, price, image }: AddToCartBut
 
   const handleAddToCart = () => {
     setAdding(true);
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const existing = cart.find((item: any) => item.id === id);
+    const cart: { id: string; title: string; price: number; image: string; quantity: number }[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existing = cart.find((item) => item.id === id);
     if (existing) {
       existing.quantity += 1;
     } else {

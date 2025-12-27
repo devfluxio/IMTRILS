@@ -9,7 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CheckoutPage = () => {
   const router = useRouter();
-  const [orderData, setOrderData] = useState<any | null>(null);
+  const [orderData, setOrderData] = useState<Record<string, any> | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [processing, setProcessing] = useState(false);
 

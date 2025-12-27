@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { capitalizeFirstLetter } from '@/utils';
-import { Collections } from '@/types';
-import { CollectionType } from '@prisma/client';
 
-interface Props {
-  type: CollectionType;
-  collections: Collections;
+  type: string;
+  collections: Collection[];
   onShowMenu: () => void;
   onCloseMenu: () => void;
+}
+
+import type { Collection } from '@/types';
 }
 
 const newItems = [
@@ -91,7 +91,7 @@ export const MegaMenu = ({
         </div>
         <div className="flex flex-[3] border-l border-solid shadow-neutral-300">
           {collections &&
-            collections.map(collection => (
+            (collections as any[]).map((collection: any) => (
               <div
                 key={collection.id}
                 className="ml-4 w-full max-w-[150px] py-8"
@@ -104,9 +104,9 @@ export const MegaMenu = ({
                   {collection.name}
                 </Link>
                 <ul className="pt-2">
-                  {collection.children
-                    .filter(subCollection => subCollection.types.includes(type))
-                    .map(subCollection => (
+                  {(collection.children as any[])
+                    .filter((subCollection: any) => subCollection.types.includes(type))
+                    .map((subCollection: any) => (
                       <li key={subCollection.id}>
                         <Link
                           href={`/products/${typeInLowerCase}/${subCollection.slug}`}

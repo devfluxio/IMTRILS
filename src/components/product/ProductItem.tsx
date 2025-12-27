@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { BsStarFill } from 'react-icons/bs';
-import { Product } from '@/types';
 import { numberWithCommas } from '@/utils';
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`;
@@ -35,6 +34,8 @@ export const Skeleton = () => {
   );
 };
 
+import type { Product } from '@/types';
+
 export const ProductItem = ({
   id,
   name,
@@ -45,7 +46,7 @@ export const ProductItem = ({
   types = [],
   sizes = [],
   colors = [],
-  }: Product & { types?: string[]; sizes?: string[]; colors?: string[] }) => {
+}: Product) => {
   const hasImages = Array.isArray(images) && images.length > 0;
   // Determine gender folder
   const gender = (Array.isArray(types) && types[0]) ? types[0].toLowerCase() : '';

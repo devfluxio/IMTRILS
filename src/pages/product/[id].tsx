@@ -14,7 +14,7 @@ const ProductDetail = () => {
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const router = useRouter();
   const { id } = router.query as { id?: string };
-  const [product, setProduct] = useState<any | null>(null);
+  const [product, setProduct] = useState<import('@/types').Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 

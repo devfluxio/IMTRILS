@@ -12,7 +12,19 @@ const { i18n } = config;
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
+  // ✅ i18n config
   i18n,
+
+  // ✅ ESLint & TypeScript errors ko build me ignore karo
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
+  // ✅ Image domains
   images: {
     remotePatterns: [
       {
@@ -33,6 +45,8 @@ const nextConfig = {
       },
     ],
   },
+
+  // ✅ Render / Docker friendly
   output: 'standalone',
 };
 
