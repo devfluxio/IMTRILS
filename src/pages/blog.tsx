@@ -5,10 +5,10 @@ import { FiCalendar, FiUser, FiArrowRight, FiTrendingUp, FiBookmark } from 'reac
 
 // Mock Data for Blog Posts
 const blogPosts = [
-  { id: 1, title: 'The Ultimate Guide to Finding Your Perfect Fit', excerpt: 'Discover the secrets to measuring yourself correctly and choosing the right size for all-day comfort.', category: 'Guide', date: 'Oct 12, 2023', author: 'Sarah J.', imageColor: 'bg-orange-50' },
-  { id: 2, title: '5 Fabric Trends Taking Over This Season', excerpt: 'From sustainable bamboo to high-tech breathable mesh, explore the materials redefining innerwear.', category: 'Trends', date: 'Oct 08, 2023', author: 'Mike T.', imageColor: 'bg-blue-50' },
-  { id: 3, title: 'Why Sustainable Lingerie Matters', excerpt: 'How eco-friendly choices in your intimate wardrobe can make a massive impact on the planet.', category: 'Sustainability', date: 'Sep 25, 2023', author: 'Emma W.', imageColor: 'bg-green-50' },
-  { id: 4, title: 'Care Instructions: Make Your Garments Last', excerpt: 'Simple washing and storage tips to keep your favorites looking new for years.', category: 'Tips', date: 'Sep 15, 2023', author: 'Team ShopSphere', imageColor: 'bg-gray-50' },
+  { id: 1, title: 'The Ultimate Guide to Finding Your Perfect Fit', excerpt: 'Discover the secrets to measuring yourself correctly and choosing the right size for all-day comfort.', category: 'Guide', date: 'Oct 12, 2023', author: 'Sarah J.', image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop' },
+  { id: 2, title: '5 Fabric Trends Taking Over This Season', excerpt: 'From sustainable bamboo to high-tech breathable mesh, explore the materials redefining innerwear.', category: 'Trends', date: 'Oct 08, 2023', author: 'Mike T.', image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=800&auto=format&fit=crop' },
+  { id: 3, title: 'Why Sustainable Lingerie Matters', excerpt: 'How eco-friendly choices in your intimate wardrobe can make a massive impact on the planet.', category: 'Sustainability', date: 'Sep 25, 2023', author: 'Emma W.', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop' },
+  { id: 4, title: 'Care Instructions: Make Your Garments Last', excerpt: 'Simple washing and storage tips to keep your favorites looking new for years.', category: 'Tips', date: 'Sep 15, 2023', author: 'Team ShopSphere', image: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?q=80&w=800&auto=format&fit=crop' },
 ];
 
 const BlogPage: NextPageWithLayout = () => {
@@ -67,13 +67,11 @@ const BlogPage: NextPageWithLayout = () => {
           {blogPosts.map((post) => (
             <article key={post.id} className="group bg-white rounded-2xl overflow-hidden border border-neutral-100 hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-300 flex flex-col h-full">
               {/* Image Placeholder */}
-              <div className={`h-64 ${post.imageColor} relative overflow-hidden`}>
+              <div className="h-64 relative overflow-hidden">
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-neutral-900 uppercase tracking-wide">
                   {post.category}
                 </div>
-                <div className="w-full h-full flex items-center justify-center text-neutral-400 opacity-30 group-hover:scale-105 transition-transform duration-700">
-                  Article Image
-                </div>
+                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
 
               <div className="p-8 flex-1 flex flex-col">

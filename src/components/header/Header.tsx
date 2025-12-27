@@ -40,6 +40,7 @@ export const Header = ({ collections }: { collections: any[] }) => {
   // Only render one button at a time based on token
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   // Check authToken on mount and on route change
   useEffect(() => {
@@ -51,11 +52,14 @@ export const Header = ({ collections }: { collections: any[] }) => {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           setIsAdmin(payload.role === 'admin');
+          setUserEmail(payload.email || null);
         } catch (e) {
           setIsAdmin(false);
+          setUserEmail(null);
         }
       } else {
         setIsAdmin(false);
+        setUserEmail(null);
       }
     };
     checkAuth();
@@ -96,7 +100,9 @@ export const Header = ({ collections }: { collections: any[] }) => {
           <ul className="ml-auto hidden h-full md:flex">
             {navLinks.map((item, index) => (
               <li
-                className={`font-medium text-neutral-700 transition-colors`}
+                className={`font-medium text-neutral-700 transition-colors ${
+                  router.asPath.startsWith(item.href) ? 'bg-neutral-100' : ''
+                }`}
                 key={index}
               >
                 <Link
@@ -108,7 +114,7 @@ export const Header = ({ collections }: { collections: any[] }) => {
               </li>
             ))}
           </ul>
-          <ul className="ml-auto items-center md:flex">
+          <ul className="ml-auto items-center md:flex relative pr-16">
             <Search onSearch={setSearchValue} />
             {/* Only one button shows at a time based on isLoggedIn */}
             {isLoggedIn ? (
@@ -120,6 +126,16 @@ export const Header = ({ collections }: { collections: any[] }) => {
                   >
                     Admin
                   </Link>
+                )}
+                {/* Profile icon with initials */}
+                {userEmail && (
+                  <div
+                    className="hidden md:flex items-center justify-center rounded-full bg-gradient-to-br from-purple-900 via-black to-black text-white font-bold text-base w-8 h-8 select-none shadow-md border-2 border-white absolute right-4 top-1/2 -translate-y-1/2 z-10"
+                    style={{paddingLeft: '8px', paddingRight: '8px'}}
+                    title={userEmail}
+                  >
+                    {userEmail.slice(0, 2).toUpperCase()}
+                  </div>
                 )}
                 <button
                   onClick={handleLogout}
@@ -136,14 +152,17 @@ export const Header = ({ collections }: { collections: any[] }) => {
                 Signup
               </Link>
             )}
-            {sideNavLinks.map(([url, Icon], idx) => (
-              <Link key={url} href={url} className={`ml-5 hidden md:block${idx === 0 ? '' : ''}`}>
-                <Icon
-                  className="text-neutral-700 transition-colors hover:text-violet-700"
-                  size="20px"
-                />
-              </Link>
-            ))}
+            {/* Move sideNavLinks to the left of profile icon */}
+            <div className="flex items-center">
+              {sideNavLinks.map(([url, Icon], idx) => (
+                <Link key={url} href={url} className={`ml-5 hidden md:block`}>
+                  <Icon
+                    className="text-neutral-700 transition-colors hover:text-violet-700"
+                    size="20px"
+                  />
+                </Link>
+              ))}
+            </div>
           </ul>
         </div>
         <Transition show={Boolean(hoveredNavLink?.collapsible)}>

@@ -40,10 +40,27 @@ router.put('/products/:id', auth, requireAdmin, async (req, res) => {
 });
 
 // Delete product
+const fs = require('fs');
+const path = require('path');
+
 router.delete('/products/:id', auth, requireAdmin, async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Not found' });
+
+    // Delete all images associated with the product
+    if (Array.isArray(product.images)) {
+      product.images.forEach(imgPath => {
+        // Only delete if path starts with /uploads/
+        if (typeof imgPath === 'string' && imgPath.startsWith('/uploads/')) {
+          const absPath = path.join(__dirname, '../../../public', imgPath);
+          fs.unlink(absPath, err => {
+            if (err) console.error('Failed to delete image:', absPath, err.message);
+          });
+        }
+      });
+    }
+
     res.json({ ok: true });
   } catch (err) {
     console.error(err);

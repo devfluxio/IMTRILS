@@ -30,7 +30,7 @@ const AdminPage: NextPageWithLayout = () => {
     sku: '',
     stock: 0,
 
-    images: '',
+    images: [],
     categories: '',
     tags: '',
 
@@ -75,7 +75,7 @@ const AdminPage: NextPageWithLayout = () => {
       compareAtPrice: '',
       sku: '',
       stock: 0,
-      images: '',
+      images: [],
       categories: '',
       tags: '',
       gender: 'men',
@@ -116,7 +116,7 @@ const AdminPage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    // On mount, check token in localStorage and verify admin
+    // On mount and on route change, check token and verify admin
     const verifyAdmin = async () => {
       const storedToken = localStorage.getItem('authToken');
       if (!storedToken) {
@@ -133,7 +133,6 @@ const AdminPage: NextPageWithLayout = () => {
         });
         if (res.ok) {
           setIsAdmin(true);
-          fetchProducts();
         } else {
           setIsAdmin(false);
           router.replace('/');
@@ -144,7 +143,13 @@ const AdminPage: NextPageWithLayout = () => {
       }
     };
     verifyAdmin();
-  }, []);
+  }, [router.asPath]);
+
+  useEffect(() => {
+    if (isAdmin && token) {
+      fetchProducts();
+    }
+  }, [isAdmin, token]);
 
   const submit = async (e?: any) => {
     e?.preventDefault();
@@ -158,7 +163,7 @@ const AdminPage: NextPageWithLayout = () => {
         sku: form.sku,
         stock: Number(form.stock) || 0,
 
-        images: form.images ? form.images.split(',').map((s: string) => s.trim()) : [],
+        images: form.images,
         categories: form.categories.split(',').map((s: string) => s.trim()),
         tags: form.tags.split(',').map((s: string) => s.trim()),
 
@@ -238,9 +243,8 @@ const AdminPage: NextPageWithLayout = () => {
       const data = await res.json();
       const urls = data.files || [];
       // append uploaded urls to images field
-      const existing = form.images ? form.images.split(',').map((s: string) => s.trim()) : [];
-      const merged = [...existing, ...urls];
-      setForm({ ...form, images: merged.join(', ') });
+      const merged = [...(Array.isArray(form.images) ? form.images : []), ...urls];
+      setForm({ ...form, images: merged });
       setSelectedFiles(null);
       alert('Upload successful');
     } catch (err) {
@@ -267,7 +271,7 @@ const AdminPage: NextPageWithLayout = () => {
       price: String(p.price || ''),
       sku: p.sku || '',
       stock: p.stock || 0,
-      images: (p.images || []).join(', '),
+      images: p.images || [],
       categories: (p.categories || []).join(', '),
       tags: (p.tags || []).join(', '),
       sizes: (p.sizes || []).join(', '),
@@ -280,7 +284,9 @@ const AdminPage: NextPageWithLayout = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-4">Admin – Inner Garments Products</h1>
       {/* Only show admin page if isAdmin is true */}
-      {isAdmin ? (
+      {loading ? (
+        <div className="text-center text-lg py-10">Loading products...</div>
+      ) : isAdmin ? (
         <>
           <form onSubmit={submit} className="border p-4 rounded mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
@@ -311,10 +317,17 @@ const AdminPage: NextPageWithLayout = () => {
             <input placeholder="Wire Type (None,Underwire)" value={form.wireType} onChange={e => setForm({ ...form, wireType: e.target.value })} />
             <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
 
-            <textarea className="col-span-2" placeholder="Images URLs (comma separated)" value={form.images} onChange={e => setForm({ ...form, images: e.target.value })} />
+            {/* Removed manual images textarea. Images are managed via upload only. */}
             <div className="col-span-2 flex items-center gap-3">
               <input type="file" multiple onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)} />
-              <button type="button" onClick={uploadFiles} className="bg-blue-600 text-white px-3 py-1 rounded">Upload Selected</button>
+              <button
+                type="button"
+                onClick={uploadFiles}
+                className="text-white px-3 py-1 rounded"
+                style={{ background: 'linear-gradient(90deg, #2d033b 70%, #810ca8 100%)' }}
+              >
+                Upload Selected
+              </button>
               <span className="text-sm text-neutral-500">Uploaded URLs will be appended to Images field</span>
             </div>
             <textarea className="col-span-2" placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
@@ -346,8 +359,24 @@ const AdminPage: NextPageWithLayout = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => startEdit(p)} className="bg-yellow-400 px-2">Edit</button>
-                  <button onClick={() => remove(p._id)} className="bg-red-500 text-white px-2">Delete</button>
+                  <button
+                    onClick={() => startEdit(p)}
+                    className="px-2 rounded text-white"
+                    style={{
+                      background: 'linear-gradient(90deg, #2d033b 70%, #810ca8 100%)',
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => remove(p._id)}
+                    className="px-2 rounded text-white"
+                    style={{
+                      background: 'linear-gradient(90deg, #222 70%, #810ca8 100%)',
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </li>
             ))}

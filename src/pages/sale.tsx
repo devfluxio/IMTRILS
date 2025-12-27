@@ -17,7 +17,7 @@ const SalePage: NextPageWithLayout = () => {
   return (
     <div className="bg-neutral-50 min-h-screen">
       {/* Hero Section with Gradient */}
-      <div className="bg-gradient-to-r from-neutral-900 via-violet-900 to-neutral-900 text-white">
+      <div className="bg-gradient-to-r from-black via-neutral-900 to-black text-white">
         <div className="container mx-auto px-4 py-16 md:py-24 max-w-7xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-6 max-w-2xl">

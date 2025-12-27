@@ -6,7 +6,7 @@ const { auth, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
-const uploadDir = path.join(__dirname, '../../public/uploads');
+const uploadDir = path.resolve(__dirname, '../../..', 'public', 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -34,7 +34,7 @@ router.post('/', auth, requireAdmin, upload.array('images', 12), (req, res) => {
   try {
     const files = req.files || [];
     const gender = req.query.gender || 'unisex';
-    const urls = files.map(f => `/assets/products/${gender}/${f.filename}`);
+    const urls = files.map(f => `/uploads/${gender}/${f.filename}`);
     res.json({ ok: true, files: urls });
   } catch (err) {
     console.error(err);

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+
 import { BsStarFill } from 'react-icons/bs';
 import { Product } from '@/types';
 import { numberWithCommas } from '@/utils';
@@ -48,13 +49,8 @@ export const ProductItem = ({
   const hasImages = Array.isArray(images) && images.length > 0;
   // Determine gender folder
   const gender = (Array.isArray(types) && types[0]) ? types[0].toLowerCase() : '';
-  // Helper to prefix image path if not already in men/women
-  const getImagePath = (url: string) => {
-    if (!url.startsWith('/assets/products/men') && !url.startsWith('/assets/products/women') && (gender === 'men' || gender === 'women')) {
-      return `/assets/products/${gender}/` + url.replace('/assets/products/', '');
-    }
-    return url;
-  };
+  // Always use the image URL as is (should be /uploads/men/... or /uploads/women/...)
+  const getImagePath = (url: string) => url;
   const firstImage = hasImages
     ? typeof images[0] === 'string'
       ? getImagePath(images[0])
@@ -70,9 +66,12 @@ export const ProductItem = ({
         <Link href={productLink} className="relative block h-full w-full">
           {hasImages ? (
             images.map((img) => {
-              const imageURL = typeof img === 'string' ? getImagePath(img) : getImagePath(img.imageURL);
+              // Sanitize image URL
+              const rawUrl = typeof img === 'string' ? img : img.imageURL;
+              const imageURL = getImagePath(rawUrl ? rawUrl.trim().replace(/\s/g, '') : '');
               const imageBlur = typeof img === 'string' ? undefined : img.imageBlur;
-              const isExternal = typeof imageURL === 'string' && imageURL.startsWith('http');
+              const isUploads = typeof imageURL === 'string' && imageURL.startsWith('/uploads/');
+              console.log('Rendering image:', imageURL);
               return (
                 <Image
                   key={imageURL}
@@ -84,18 +83,18 @@ export const ProductItem = ({
                   })}
                   width={350}
                   height={350}
-                  unoptimized={isExternal}
+                  unoptimized={isUploads}
                   {...(imageBlur ? { placeholder: 'blur', blurDataURL: imageBlur } : {})}
                 />
               );
             })
           ) : (
             <Image
-              src={firstImage}
+              src={typeof firstImage === 'string' ? firstImage.trim().replace(/\s/g, '') : firstImage}
               alt={`${name} placeholder`}
               width={350}
               height={350}
-              unoptimized={typeof firstImage === 'string' && firstImage.startsWith('http')}
+              unoptimized={typeof firstImage === 'string' && firstImage.startsWith('/uploads/')}
             />
           )}
         </Link>
@@ -124,7 +123,9 @@ export const ProductItem = ({
       <div className="mb-1 mt-2 space-y-4 px-1">
         <div className="flex gap-2">
           {hasImages && images.map((img, index) => {
-            const imageURL = typeof img === 'string' ? getImagePath(img) : getImagePath(img.imageURL);
+            // Sanitize image URL
+            const rawUrl = typeof img === 'string' ? img : img.imageURL;
+            const imageURL = getImagePath(rawUrl ? rawUrl.trim().replace(/\s/g, '') : '');
             const imageBlur = typeof img === 'string' ? undefined : img.imageBlur;
             const isExternal = typeof imageURL === 'string' && imageURL.startsWith('http');
             return (

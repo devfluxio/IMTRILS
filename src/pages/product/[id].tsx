@@ -2,6 +2,7 @@ import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import AddToCartButton from '@/components/product/AddToCartButton';
 import { PrimaryLayout } from '@/layouts';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { ReactElement } from 'react';
@@ -114,7 +115,12 @@ const ProductDetail = () => {
 
           <div className="mt-6 flex gap-3">
             <button onClick={handleBuy} className="bg-black text-white px-4 py-2 rounded">Buy Now</button>
-            <button onClick={() => alert('Add to cart not implemented')} className="border px-4 py-2 rounded">Add to cart</button>
+            <AddToCartButton
+              id={product._id}
+              name={product.title || product.name}
+              price={typeof product.price === 'number' ? product.price : Number(product.price || 0)}
+              image={selectedImage || (product.images && product.images[0]) || '/assets/placeholder.png'}
+            />
           </div>
 
           <div className="mt-6 text-sm text-neutral-500">
