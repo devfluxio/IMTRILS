@@ -25,12 +25,13 @@ export const BottomNavigation = ({ navLinks, collections }: Props) => {
 
   const [currentTab, setCurrentTab] = useState('');
 
+  // Always use static tab names regardless of page
   const bottomTabs: BottomTab[] = [
-    { title: t('common:home'), url: '/', Icon: FiHome },
-    { title: t('common:collections'), url: '/#collections', Icon: FiGrid },
-    { title: t('common:cart'), url: '/cart', Icon: FiShoppingBag },
-    { title: t('common:wishlist'), url: '/wishlist', Icon: FiHeart },
-    { title: t('common:profile'), url: '/signin', Icon: FiUser },
+    { title: 'Home', url: '/', Icon: FiHome },
+    { title: 'Collections', url: '/#collections', Icon: FiGrid },
+    { title: 'Cart', url: '/cart', Icon: FiShoppingBag },
+    { title: 'Wishlist', url: '/wishlist', Icon: FiHeart },
+    { title: 'Profile', url: '/signin', Icon: FiUser },
   ];
 
   return (

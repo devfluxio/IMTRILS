@@ -1,3 +1,31 @@
+            <style jsx global>{`
+              @media (max-width: 600px) {
+                .admin-checkbox {
+                  width: 13px !important;
+                  height: 13px !important;
+                  aspect-ratio: 1/1 !important;
+                  border-radius: 3px !important;
+                  min-width: 0 !important;
+                  min-height: 0 !important;
+                  padding: 0 !important;
+                  margin: 0 2px 0 0 !important;
+                }
+                .admin-checkbox-row label {
+                  font-size: 11px !important;
+                }
+              }
+              @media (max-width: 400px) {
+                .admin-checkbox {
+                  width: 11px !important;
+                  height: 11px !important;
+                  aspect-ratio: 1/1 !important;
+                  border-radius: 2px !important;
+                }
+                .admin-checkbox-row label {
+                  font-size: 10px !important;
+                }
+              }
+            `}</style>
 import type { GetStaticProps } from 'next';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '../_app';
@@ -288,48 +316,83 @@ const AdminPage: NextPageWithLayout = () => {
         <div className="text-center text-lg py-10">Loading products...</div>
       ) : isAdmin ? (
         <>
-          <form onSubmit={submit} className="border p-4 rounded mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <form onSubmit={submit} className="border p-2 sm:p-4 rounded mb-6 grid grid-cols-1 gap-2 sm:gap-3 admin-product-form text-xs sm:text-sm lg:text-base">
+
             <input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
             <input placeholder="Brand" value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} />
             <input placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} />
             <input placeholder="Compare Price" value={form.compareAtPrice} onChange={e => setForm({ ...form, compareAtPrice: e.target.value })} />
             <input placeholder="SKU" value={form.sku} onChange={e => setForm({ ...form, sku: e.target.value })} />
             <input placeholder="Stock" value={form.stock} onChange={e => setForm({ ...form, stock: Number(e.target.value) })} />
-
             <input placeholder="Categories (comma separated)" value={form.categories} onChange={e => setForm({ ...form, categories: e.target.value })} />
             <input placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
-
             <input placeholder="Sizes (S,M,L)" value={form.sizes} onChange={e => setForm({ ...form, sizes: e.target.value })} />
             <input placeholder="Colors" value={form.colors} onChange={e => setForm({ ...form, colors: e.target.value })} />
-
             <input placeholder="Product Type" value={form.productType} onChange={e => setForm({ ...form, productType: e.target.value })} />
             <input placeholder="Gender (men,women,unisex)" value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })} />
-
             <input placeholder="Fabric" value={form.fabric} onChange={e => setForm({ ...form, fabric: e.target.value })} />
             <input placeholder="Material" value={form.material} onChange={e => setForm({ ...form, material: e.target.value })} />
-
             <input placeholder="Fit" value={form.fit} onChange={e => setForm({ ...form, fit: e.target.value })} />
             <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
-
             <input placeholder="Support Level (low,medium,high)" value={form.supportLevel} onChange={e => setForm({ ...form, supportLevel: e.target.value })} />
             <input placeholder="Padding (None,Light,Medium)" value={form.padding} onChange={e => setForm({ ...form, padding: e.target.value })} />
-
             <input placeholder="Wire Type (None,Underwire)" value={form.wireType} onChange={e => setForm({ ...form, wireType: e.target.value })} />
             <input placeholder="Pattern" value={form.pattern} onChange={e => setForm({ ...form, pattern: e.target.value })} />
+            <style jsx global>{`
+              @media (max-width: 600px) {
+                .admin-product-form {
+                  grid-template-columns: 1fr !important;
+                  font-size: 13px !important;
+                  padding: 8px !important;
+                }
+                .admin-product-form input,
+                .admin-product-form textarea {
+                  width: 100% !important;
+                  min-width: 0 !important;
+                  font-size: 13px !important;
+                }
+              }
+            `}</style>
 
             {/* Removed manual images textarea. Images are managed via upload only. */}
-            <div className="col-span-2 flex items-center gap-3">
-              <input type="file" multiple onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)} />
+            <div className="col-span-2 admin-upload-section flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 w-full text-xs sm:text-sm">
+              <input type="file" multiple onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)} className="w-full" />
               <button
                 type="button"
                 onClick={uploadFiles}
-                className="text-white px-3 py-1 rounded"
+                className="text-white px-2.5 py-1 rounded w-full"
                 style={{ background: 'linear-gradient(90deg, #2d033b 70%, #810ca8 100%)' }}
               >
                 Upload Selected
               </button>
-              <span className="text-sm text-neutral-500">Uploaded URLs will be appended to Images field</span>
+              <span className="text-neutral-500 w-full">Uploaded URLs will be appended to Images field</span>
             </div>
+            <style jsx global>{`
+              @media (max-width: 400px) {
+                .admin-upload-section {
+                  flex-direction: column !important;
+                  align-items: stretch !important;
+                }
+                .admin-upload-section input[type='file'],
+                .admin-upload-section button,
+                .admin-upload-section span {
+                  width: 100% !important;
+                  min-width: 0 !important;
+                  font-size: 12px !important;
+                  padding-left: 6px !important;
+                  padding-right: 6px !important;
+                }
+              }
+              @media (max-width: 350px) {
+                .admin-upload-section input[type='file'],
+                .admin-upload-section button,
+                .admin-upload-section span {
+                  font-size: 10px !important;
+                  padding-left: 2px !important;
+                  padding-right: 2px !important;
+                }
+              }
+            `}</style>
             <textarea className="col-span-2" placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
 
             <input placeholder="SEO Title" value={form.seoTitle} onChange={e => setForm({ ...form, seoTitle: e.target.value })} className="col-span-2" />
@@ -337,12 +400,36 @@ const AdminPage: NextPageWithLayout = () => {
 
             <input placeholder="Variants JSON (optional)" value={form.variantsJson} onChange={e => setForm({ ...form, variantsJson: e.target.value })} className="col-span-2" />
 
-            <div className="col-span-2 flex gap-3 items-center">
-              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.published} onChange={e => setForm({ ...form, published: e.target.checked })} /> Published</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} /> Featured</label>
+            <div className="col-span-2 flex gap-3 items-center admin-checkbox-row">
+              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.published} onChange={e => setForm({ ...form, published: e.target.checked })} className="admin-checkbox" /> Published</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} className="admin-checkbox" /> Featured</label>
             </div>
+            <style jsx global>{`
+              @media (max-width: 600px) {
+                .admin-checkbox {
+                  width: 16px !important;
+                  height: 16px !important;
+                }
+                .admin-checkbox-row label {
+                  font-size: 13px !important;
+                }
+              }
+              @media (max-width: 400px) {
+                .admin-checkbox {
+                  width: 13px !important;
+                  height: 13px !important;
+                }
+                .admin-checkbox-row label {
+                  font-size: 11px !important;
+                }
+              }
+            `}</style>
 
-            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded col-span-2">
+            <button
+              type="submit"
+              className="text-white px-4 py-2 rounded col-span-2"
+              style={{ background: 'linear-gradient(90deg, #2d033b 70%, #810ca8 100%)' }}
+            >
               {editingId ? 'Update Product' : 'Create Product'}
             </button>
           </form>

@@ -81,7 +81,7 @@ export const CollectionsPage = ({
               </Accordion>
             ) : (
               <Link
-                href={item.name}
+                href={['men','women'].includes(item.name) ? `/products/${item.name}` : item.name === 'contacts' ? '/contact' : `/${item.name}`}
                 className="block py-4"
                 onClick={onPageClose}
               >
